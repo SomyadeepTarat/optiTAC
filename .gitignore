@@ -1,0 +1,25 @@
+# Dependencies and generated builds
+node_modules/
+dist/
+build/
+*.o
+*.tsbuildinfo
+__pycache__/
+*.py[cod]
+
+# Local exports, historical binaries, and temporary work
+.local-artifacts/
+output/
+tmp/
+*.zip
+/mpc
+/mpc.exe
+~$*
+
+# Machine-specific files and secrets
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+*.log

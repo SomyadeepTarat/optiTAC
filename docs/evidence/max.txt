@@ -1,0 +1,158 @@
+===== TOKENS =====
+line 3   KEYWORD               int
+line 3   FUNCTION_IDENTIFIER   max
+line 3   PUNCTUATION           (
+line 3   KEYWORD               int
+line 3   IDENTIFIER            x
+line 3   PUNCTUATION           ,
+line 3   KEYWORD               int
+line 3   IDENTIFIER            y
+line 3   PUNCTUATION           )
+line 3   PUNCTUATION           {
+line 4   KEYWORD               if
+line 4   PUNCTUATION           (
+line 4   IDENTIFIER            x
+line 4   RELATIONAL_OPERATOR   >
+line 4   IDENTIFIER            y
+line 4   PUNCTUATION           )
+line 5   KEYWORD               return
+line 5   IDENTIFIER            x
+line 5   PUNCTUATION           ;
+line 6   KEYWORD               else
+line 7   KEYWORD               return
+line 7   IDENTIFIER            y
+line 7   PUNCTUATION           ;
+line 8   PUNCTUATION           }
+line 10  KEYWORD               int
+line 10  ENTRY_POINT_FUNCTION  main
+line 10  PUNCTUATION           (
+line 10  PUNCTUATION           )
+line 10  PUNCTUATION           {
+line 11  KEYWORD               int
+line 11  IDENTIFIER            m
+line 11  PUNCTUATION           ;
+line 12  IDENTIFIER            m
+line 12  ASSIGNMENT_OPERATOR   =
+line 12  FUNCTION_IDENTIFIER   max
+line 12  PUNCTUATION           (
+line 12  INTEGER_LITERAL       3
+line 12  PUNCTUATION           ,
+line 12  INTEGER_LITERAL       7
+line 12  PUNCTUATION           )
+line 12  PUNCTUATION           ;
+line 13  KEYWORD               return
+line 13  IDENTIFIER            m
+line 13  PUNCTUATION           ;
+line 14  PUNCTUATION           }
+
+===== SYNTAX TREE =====
+FUNCTION max (x, y)
+    IF x > y
+        RETURN x
+    ELSE
+        RETURN y
+
+FUNCTION main ()
+    DECLARE m
+    ASSIGN m = max(3, 7)
+    RETURN m
+
+
+===== SYMBOL TABLE =====
+function max (2 params)
+    x        param  fp+4
+    y        param  fp+5
+function main (0 params)
+    m        local  fp+4
+
+===== ACTIVATION RECORDS =====
+
+max:
+    fp+0  return address
+    fp+1  control link
+    fp+2  access link (reserved: -1)
+    fp+3  return value
+    fp+4  param x
+    fp+5  param y
+    fp+6  temp t1
+
+main:
+    fp+0  return address
+    fp+1  control link
+    fp+2  access link (reserved: -1)
+    fp+3  return value
+    fp+4  local m
+    fp+5  temp t1
+
+===== THREE-ADDRESS CODE =====
+
+max:
+    t1 = x@4 > y@5
+    ifFalse t1 goto L1
+    return x@4
+    goto L2
+    L1:
+    return y@5
+    L2:
+    trap missing return
+
+main:
+    param 3
+    param 7
+    t1 = call max, 2
+    m@4 = t1
+    return m@4
+    trap missing return
+
+===== QUADRUPLES =====
+
+max:
+    #    (op, arg1, arg2, result)
+    0    (>, x@4, y@5, t1)
+    1    (ifFalse, t1, -, L1)
+    2    (return, x@4, -, -)
+    3    (goto, -, -, L2)
+    4    (label, -, -, L1)
+    5    (return, y@5, -, -)
+    6    (label, -, -, L2)
+    7    (trap, missing return, -, -)
+
+main:
+    #    (op, arg1, arg2, result)
+    0    (param, 3, -, -)
+    1    (param, 7, -, -)
+    2    (call, max, 2, t1)
+    3    (=, t1, -, m@4)
+    4    (return, m@4, -, -)
+    5    (trap, missing return, -, -)
+
+===== OPTIMIZED TAC =====
+
+max:
+    t1 = x@4 > y@5
+    ifFalse t1 goto L1
+    return x@4
+    L1:
+    return y@5
+
+main:
+    param 3
+    param 7
+    t1 = call max, 2
+    return t1
+
+===== VM EXECUTION =====
+Result: 7
+
+===== OPTIMIZER STATISTICS =====
+static instructions: 14 -> 9 (35.7% fewer)
+dynamic VM steps: 9 -> 8 (11.1% fewer)
+passes to fixpoint: 2
+constants folded: 0
+algebraic rewrites: 0
+strength reductions: 0
+common subexprs: 0
+copies propagated: 1
+branches folded: 0
+unreachable removed: 4
+dead stores removed: 1

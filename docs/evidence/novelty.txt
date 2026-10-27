@@ -1,0 +1,325 @@
+===== TOKENS =====
+line 2   KEYWORD               int
+line 2   FUNCTION_IDENTIFIER   work
+line 2   PUNCTUATION           (
+line 2   KEYWORD               int
+line 2   IDENTIFIER            n
+line 2   PUNCTUATION           )
+line 2   PUNCTUATION           {
+line 3   KEYWORD               int
+line 3   IDENTIFIER            i
+line 3   PUNCTUATION           ;
+line 4   KEYWORD               int
+line 4   IDENTIFIER            total
+line 4   PUNCTUATION           ;
+line 5   KEYWORD               int
+line 5   IDENTIFIER            a
+line 5   PUNCTUATION           ;
+line 6   KEYWORD               int
+line 6   IDENTIFIER            b
+line 6   PUNCTUATION           ;
+line 7   KEYWORD               int
+line 7   IDENTIFIER            copy
+line 7   PUNCTUATION           ;
+line 8   KEYWORD               int
+line 8   IDENTIFIER            dead
+line 8   PUNCTUATION           ;
+line 9   IDENTIFIER            i
+line 9   ASSIGNMENT_OPERATOR   =
+line 9   INTEGER_LITERAL       0
+line 9   PUNCTUATION           ;
+line 10  IDENTIFIER            total
+line 10  ASSIGNMENT_OPERATOR   =
+line 10  INTEGER_LITERAL       0
+line 10  PUNCTUATION           ;
+line 11  IDENTIFIER            dead
+line 11  ASSIGNMENT_OPERATOR   =
+line 11  INTEGER_LITERAL       2
+line 11  ARITHMETIC_OPERATOR   +
+line 11  INTEGER_LITERAL       3
+line 11  ARITHMETIC_OPERATOR   *
+line 11  INTEGER_LITERAL       4
+line 11  PUNCTUATION           ;
+line 12  KEYWORD               if
+line 12  PUNCTUATION           (
+line 12  INTEGER_LITERAL       0
+line 12  PUNCTUATION           )
+line 12  IDENTIFIER            total
+line 12  ASSIGNMENT_OPERATOR   =
+line 12  INTEGER_LITERAL       999
+line 12  PUNCTUATION           ;
+line 13  KEYWORD               while
+line 13  PUNCTUATION           (
+line 13  IDENTIFIER            i
+line 13  RELATIONAL_OPERATOR   <
+line 13  IDENTIFIER            n
+line 13  PUNCTUATION           )
+line 13  PUNCTUATION           {
+line 14  IDENTIFIER            a
+line 14  ASSIGNMENT_OPERATOR   =
+line 14  IDENTIFIER            i
+line 14  ARITHMETIC_OPERATOR   +
+line 14  IDENTIFIER            n
+line 14  PUNCTUATION           ;
+line 15  IDENTIFIER            b
+line 15  ASSIGNMENT_OPERATOR   =
+line 15  IDENTIFIER            n
+line 15  ARITHMETIC_OPERATOR   +
+line 15  IDENTIFIER            i
+line 15  PUNCTUATION           ;
+line 16  IDENTIFIER            copy
+line 16  ASSIGNMENT_OPERATOR   =
+line 16  IDENTIFIER            a
+line 16  PUNCTUATION           ;
+line 17  IDENTIFIER            dead
+line 17  ASSIGNMENT_OPERATOR   =
+line 17  IDENTIFIER            copy
+line 17  ARITHMETIC_OPERATOR   +
+line 17  INTEGER_LITERAL       0
+line 17  PUNCTUATION           ;
+line 18  IDENTIFIER            dead
+line 18  ASSIGNMENT_OPERATOR   =
+line 18  IDENTIFIER            i
+line 18  ARITHMETIC_OPERATOR   *
+line 18  INTEGER_LITERAL       2
+line 18  PUNCTUATION           ;
+line 19  IDENTIFIER            total
+line 19  ASSIGNMENT_OPERATOR   =
+line 19  IDENTIFIER            total
+line 19  ARITHMETIC_OPERATOR   +
+line 19  PUNCTUATION           (
+line 19  IDENTIFIER            a
+line 19  ARITHMETIC_OPERATOR   -
+line 19  IDENTIFIER            b
+line 19  PUNCTUATION           )
+line 19  ARITHMETIC_OPERATOR   +
+line 19  INTEGER_LITERAL       1
+line 19  PUNCTUATION           ;
+line 20  IDENTIFIER            i
+line 20  ASSIGNMENT_OPERATOR   =
+line 20  IDENTIFIER            i
+line 20  ARITHMETIC_OPERATOR   +
+line 20  INTEGER_LITERAL       1
+line 20  PUNCTUATION           ;
+line 21  PUNCTUATION           }
+line 22  KEYWORD               return
+line 22  IDENTIFIER            total
+line 22  PUNCTUATION           ;
+line 23  PUNCTUATION           }
+line 24  KEYWORD               int
+line 24  ENTRY_POINT_FUNCTION  main
+line 24  PUNCTUATION           (
+line 24  PUNCTUATION           )
+line 24  PUNCTUATION           {
+line 25  KEYWORD               return
+line 25  FUNCTION_IDENTIFIER   work
+line 25  PUNCTUATION           (
+line 25  INTEGER_LITERAL       100
+line 25  PUNCTUATION           )
+line 25  PUNCTUATION           ;
+line 26  KEYWORD               return
+line 26  INTEGER_LITERAL       1
+line 26  ARITHMETIC_OPERATOR   /
+line 26  INTEGER_LITERAL       0
+line 26  PUNCTUATION           ;
+line 27  PUNCTUATION           }
+
+===== SYNTAX TREE =====
+FUNCTION work (n)
+    DECLARE i
+    DECLARE total
+    DECLARE a
+    DECLARE b
+    DECLARE copy
+    DECLARE dead
+    ASSIGN i = 0
+    ASSIGN total = 0
+    ASSIGN dead = 2 + (3 * 4)
+    IF 0
+        ASSIGN total = 999
+    WHILE i < n
+        ASSIGN a = i + n
+        ASSIGN b = n + i
+        ASSIGN copy = a
+        ASSIGN dead = copy + 0
+        ASSIGN dead = i * 2
+        ASSIGN total = (total + (a - b)) + 1
+        ASSIGN i = i + 1
+    RETURN total
+
+FUNCTION main ()
+    RETURN work(100)
+    RETURN 1 / 0
+
+
+===== SYMBOL TABLE =====
+function work (1 params)
+    n        param  fp+4
+    i        local  fp+5
+    total    local  fp+6
+    a        local  fp+7
+    b        local  fp+8
+    copy     local  fp+9
+    dead     local  fp+10
+function main (0 params)
+
+===== ACTIVATION RECORDS =====
+
+work:
+    fp+0  return address
+    fp+1  control link
+    fp+2  access link (reserved: -1)
+    fp+3  return value
+    fp+4  param n
+    fp+5  local i
+    fp+6  local total
+    fp+7  local a
+    fp+8  local b
+    fp+9  local copy
+    fp+10  local dead
+    fp+11  temp t1
+    fp+12  temp t2
+    fp+13  temp t3
+    fp+14  temp t4
+    fp+15  temp t5
+    fp+16  temp t6
+    fp+17  temp t7
+    fp+18  temp t8
+    fp+19  temp t9
+    fp+20  temp t10
+    fp+21  temp t11
+
+main:
+    fp+0  return address
+    fp+1  control link
+    fp+2  access link (reserved: -1)
+    fp+3  return value
+    fp+4  temp t1
+    fp+5  temp t2
+
+===== THREE-ADDRESS CODE =====
+
+work:
+    i@5 = 0
+    total@6 = 0
+    t1 = 3 * 4
+    t2 = 2 + t1
+    dead@10 = t2
+    ifFalse 0 goto L1
+    total@6 = 999
+    L1:
+    L2:
+    t3 = i@5 < n@4
+    ifFalse t3 goto L3
+    t4 = i@5 + n@4
+    a@7 = t4
+    t5 = n@4 + i@5
+    b@8 = t5
+    copy@9 = a@7
+    t6 = copy@9 + 0
+    dead@10 = t6
+    t7 = i@5 * 2
+    dead@10 = t7
+    t8 = a@7 - b@8
+    t9 = total@6 + t8
+    t10 = t9 + 1
+    total@6 = t10
+    t11 = i@5 + 1
+    i@5 = t11
+    goto L2
+    L3:
+    return total@6
+    trap missing return
+
+main:
+    param 100
+    t1 = call work, 1
+    return t1
+    t2 = 1 / 0
+    return t2
+    trap missing return
+
+===== QUADRUPLES =====
+
+work:
+    #    (op, arg1, arg2, result)
+    0    (=, 0, -, i@5)
+    1    (=, 0, -, total@6)
+    2    (*, 3, 4, t1)
+    3    (+, 2, t1, t2)
+    4    (=, t2, -, dead@10)
+    5    (ifFalse, 0, -, L1)
+    6    (=, 999, -, total@6)
+    7    (label, -, -, L1)
+    8    (label, -, -, L2)
+    9    (<, i@5, n@4, t3)
+    10   (ifFalse, t3, -, L3)
+    11   (+, i@5, n@4, t4)
+    12   (=, t4, -, a@7)
+    13   (+, n@4, i@5, t5)
+    14   (=, t5, -, b@8)
+    15   (=, a@7, -, copy@9)
+    16   (+, copy@9, 0, t6)
+    17   (=, t6, -, dead@10)
+    18   (*, i@5, 2, t7)
+    19   (=, t7, -, dead@10)
+    20   (-, a@7, b@8, t8)
+    21   (+, total@6, t8, t9)
+    22   (+, t9, 1, t10)
+    23   (=, t10, -, total@6)
+    24   (+, i@5, 1, t11)
+    25   (=, t11, -, i@5)
+    26   (goto, -, -, L2)
+    27   (label, -, -, L3)
+    28   (return, total@6, -, -)
+    29   (trap, missing return, -, -)
+
+main:
+    #    (op, arg1, arg2, result)
+    0    (param, 100, -, -)
+    1    (call, work, 1, t1)
+    2    (return, t1, -, -)
+    3    (/, 1, 0, t2)
+    4    (return, t2, -, -)
+    5    (trap, missing return, -, -)
+
+===== OPTIMIZED TAC =====
+
+work:
+    i@5 = 0
+    total@6 = 0
+    L2:
+    t3 = i@5 < n@4
+    ifFalse t3 goto L3
+    t4 = i@5 + n@4
+    t7 = i@5 + i@5
+    t8 = t4 - t4
+    t9 = total@6 + t8
+    t10 = t9 + 1
+    total@6 = t10
+    t11 = i@5 + 1
+    i@5 = t11
+    goto L2
+    L3:
+    return total@6
+
+main:
+    param 100
+    t1 = call work, 1
+    return t1
+
+===== VM EXECUTION =====
+Result: 100
+
+===== OPTIMIZER STATISTICS =====
+static instructions: 36 -> 19 (47.2% fewer)
+dynamic VM steps: 1915 -> 1210 (36.8% fewer)
+passes to fixpoint: 3
+constants folded: 4
+algebraic rewrites: 1
+strength reductions: 1
+common subexprs: 1
+copies propagated: 6
+branches folded: 2
+unreachable removed: 6
+dead stores removed: 10

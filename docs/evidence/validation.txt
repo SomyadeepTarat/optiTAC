@@ -1,0 +1,8 @@
+Validation completed 2026-10-27
+126 browser tests passed
+31 native tests passed
+Production build passed
+ESLint passed
+1,500 differential programs: 0 mismatches (seed 307)
+31 native sanitizer tests passed
+System Flex generated one signedness warning in scanner skeleton; no sanitizer failures.

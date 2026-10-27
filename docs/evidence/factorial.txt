@@ -1,0 +1,305 @@
+===== TOKENS =====
+line 3   KEYWORD               int
+line 3   FUNCTION_IDENTIFIER   fact
+line 3   PUNCTUATION           (
+line 3   KEYWORD               int
+line 3   IDENTIFIER            n
+line 3   PUNCTUATION           )
+line 3   PUNCTUATION           {
+line 4   KEYWORD               if
+line 4   PUNCTUATION           (
+line 4   IDENTIFIER            n
+line 4   RELATIONAL_OPERATOR   <=
+line 4   INTEGER_LITERAL       1
+line 4   PUNCTUATION           )
+line 5   KEYWORD               return
+line 5   INTEGER_LITERAL       1
+line 5   PUNCTUATION           ;
+line 6   KEYWORD               return
+line 6   IDENTIFIER            n
+line 6   ARITHMETIC_OPERATOR   *
+line 6   FUNCTION_IDENTIFIER   fact
+line 6   PUNCTUATION           (
+line 6   IDENTIFIER            n
+line 6   ARITHMETIC_OPERATOR   -
+line 6   INTEGER_LITERAL       1
+line 6   PUNCTUATION           )
+line 6   PUNCTUATION           ;
+line 7   PUNCTUATION           }
+line 9   KEYWORD               int
+line 9   FUNCTION_IDENTIFIER   power
+line 9   PUNCTUATION           (
+line 9   KEYWORD               int
+line 9   IDENTIFIER            base
+line 9   PUNCTUATION           ,
+line 9   KEYWORD               int
+line 9   IDENTIFIER            exp
+line 9   PUNCTUATION           )
+line 9   PUNCTUATION           {
+line 10  KEYWORD               int
+line 10  IDENTIFIER            result
+line 10  PUNCTUATION           ;
+line 11  IDENTIFIER            result
+line 11  ASSIGNMENT_OPERATOR   =
+line 11  INTEGER_LITERAL       1
+line 11  PUNCTUATION           ;
+line 12  KEYWORD               while
+line 12  PUNCTUATION           (
+line 12  IDENTIFIER            exp
+line 12  RELATIONAL_OPERATOR   >
+line 12  INTEGER_LITERAL       0
+line 12  PUNCTUATION           )
+line 12  PUNCTUATION           {
+line 13  IDENTIFIER            result
+line 13  ASSIGNMENT_OPERATOR   =
+line 13  IDENTIFIER            result
+line 13  ARITHMETIC_OPERATOR   *
+line 13  IDENTIFIER            base
+line 13  PUNCTUATION           ;
+line 14  IDENTIFIER            exp
+line 14  ASSIGNMENT_OPERATOR   =
+line 14  IDENTIFIER            exp
+line 14  ARITHMETIC_OPERATOR   -
+line 14  INTEGER_LITERAL       1
+line 14  PUNCTUATION           ;
+line 15  PUNCTUATION           }
+line 16  KEYWORD               return
+line 16  IDENTIFIER            result
+line 16  PUNCTUATION           ;
+line 17  PUNCTUATION           }
+line 19  KEYWORD               int
+line 19  ENTRY_POINT_FUNCTION  main
+line 19  PUNCTUATION           (
+line 19  PUNCTUATION           )
+line 19  PUNCTUATION           {
+line 20  KEYWORD               int
+line 20  IDENTIFIER            a
+line 20  PUNCTUATION           ;
+line 21  KEYWORD               int
+line 21  IDENTIFIER            b
+line 21  PUNCTUATION           ;
+line 22  IDENTIFIER            a
+line 22  ASSIGNMENT_OPERATOR   =
+line 22  FUNCTION_IDENTIFIER   fact
+line 22  PUNCTUATION           (
+line 22  INTEGER_LITERAL       5
+line 22  PUNCTUATION           )
+line 22  PUNCTUATION           ;
+line 23  IDENTIFIER            b
+line 23  ASSIGNMENT_OPERATOR   =
+line 23  FUNCTION_IDENTIFIER   power
+line 23  PUNCTUATION           (
+line 23  INTEGER_LITERAL       2
+line 23  PUNCTUATION           ,
+line 23  INTEGER_LITERAL       10
+line 23  PUNCTUATION           )
+line 23  PUNCTUATION           ;
+line 24  KEYWORD               return
+line 24  IDENTIFIER            a
+line 24  ARITHMETIC_OPERATOR   +
+line 24  IDENTIFIER            b
+line 24  PUNCTUATION           ;
+line 25  PUNCTUATION           }
+
+===== SYNTAX TREE =====
+FUNCTION fact (n)
+    IF n <= 1
+        RETURN 1
+    RETURN n * fact(n - 1)
+
+FUNCTION power (base, exp)
+    DECLARE result
+    ASSIGN result = 1
+    WHILE exp > 0
+        ASSIGN result = result * base
+        ASSIGN exp = exp - 1
+    RETURN result
+
+FUNCTION main ()
+    DECLARE a
+    DECLARE b
+    ASSIGN a = fact(5)
+    ASSIGN b = power(2, 10)
+    RETURN a + b
+
+
+===== SYMBOL TABLE =====
+function fact (1 params)
+    n        param  fp+4
+function power (2 params)
+    base     param  fp+4
+    exp      param  fp+5
+    result   local  fp+6
+function main (0 params)
+    a        local  fp+4
+    b        local  fp+5
+
+===== ACTIVATION RECORDS =====
+
+fact:
+    fp+0  return address
+    fp+1  control link
+    fp+2  access link (reserved: -1)
+    fp+3  return value
+    fp+4  param n
+    fp+5  temp t1
+    fp+6  temp t2
+    fp+7  temp t3
+    fp+8  temp t4
+
+power:
+    fp+0  return address
+    fp+1  control link
+    fp+2  access link (reserved: -1)
+    fp+3  return value
+    fp+4  param base
+    fp+5  param exp
+    fp+6  local result
+    fp+7  temp t1
+    fp+8  temp t2
+    fp+9  temp t3
+
+main:
+    fp+0  return address
+    fp+1  control link
+    fp+2  access link (reserved: -1)
+    fp+3  return value
+    fp+4  local a
+    fp+5  local b
+    fp+6  temp t1
+    fp+7  temp t2
+    fp+8  temp t3
+
+===== THREE-ADDRESS CODE =====
+
+fact:
+    t1 = n@4 <= 1
+    ifFalse t1 goto L1
+    return 1
+    L1:
+    t2 = n@4 - 1
+    param t2
+    t3 = call fact, 1
+    t4 = n@4 * t3
+    return t4
+    trap missing return
+
+power:
+    result@6 = 1
+    L1:
+    t1 = exp@5 > 0
+    ifFalse t1 goto L2
+    t2 = result@6 * base@4
+    result@6 = t2
+    t3 = exp@5 - 1
+    exp@5 = t3
+    goto L1
+    L2:
+    return result@6
+    trap missing return
+
+main:
+    param 5
+    t1 = call fact, 1
+    a@4 = t1
+    param 2
+    param 10
+    t2 = call power, 2
+    b@5 = t2
+    t3 = a@4 + b@5
+    return t3
+    trap missing return
+
+===== QUADRUPLES =====
+
+fact:
+    #    (op, arg1, arg2, result)
+    0    (<=, n@4, 1, t1)
+    1    (ifFalse, t1, -, L1)
+    2    (return, 1, -, -)
+    3    (label, -, -, L1)
+    4    (-, n@4, 1, t2)
+    5    (param, t2, -, -)
+    6    (call, fact, 1, t3)
+    7    (*, n@4, t3, t4)
+    8    (return, t4, -, -)
+    9    (trap, missing return, -, -)
+
+power:
+    #    (op, arg1, arg2, result)
+    0    (=, 1, -, result@6)
+    1    (label, -, -, L1)
+    2    (>, exp@5, 0, t1)
+    3    (ifFalse, t1, -, L2)
+    4    (*, result@6, base@4, t2)
+    5    (=, t2, -, result@6)
+    6    (-, exp@5, 1, t3)
+    7    (=, t3, -, exp@5)
+    8    (goto, -, -, L1)
+    9    (label, -, -, L2)
+    10   (return, result@6, -, -)
+    11   (trap, missing return, -, -)
+
+main:
+    #    (op, arg1, arg2, result)
+    0    (param, 5, -, -)
+    1    (call, fact, 1, t1)
+    2    (=, t1, -, a@4)
+    3    (param, 2, -, -)
+    4    (param, 10, -, -)
+    5    (call, power, 2, t2)
+    6    (=, t2, -, b@5)
+    7    (+, a@4, b@5, t3)
+    8    (return, t3, -, -)
+    9    (trap, missing return, -, -)
+
+===== OPTIMIZED TAC =====
+
+fact:
+    t1 = n@4 <= 1
+    ifFalse t1 goto L1
+    return 1
+    L1:
+    t2 = n@4 - 1
+    param t2
+    t3 = call fact, 1
+    t4 = n@4 * t3
+    return t4
+
+power:
+    result@6 = 1
+    L1:
+    t1 = exp@5 > 0
+    ifFalse t1 goto L2
+    t2 = result@6 * base@4
+    result@6 = t2
+    t3 = exp@5 - 1
+    exp@5 = t3
+    goto L1
+    L2:
+    return result@6
+
+main:
+    param 5
+    t1 = call fact, 1
+    param 2
+    param 10
+    t2 = call power, 2
+    t3 = t1 + t2
+    return t3
+
+===== VM EXECUTION =====
+Result: 1144
+
+===== OPTIMIZER STATISTICS =====
+static instructions: 32 -> 27 (15.6% fewer)
+dynamic VM steps: 130 -> 128 (1.5% fewer)
+passes to fixpoint: 2
+constants folded: 0
+algebraic rewrites: 0
+strength reductions: 0
+common subexprs: 0
+copies propagated: 2
+branches folded: 0
+unreachable removed: 3
+dead stores removed: 2

@@ -1,0 +1,177 @@
+===== TOKENS =====
+line 3   KEYWORD               int
+line 3   ENTRY_POINT_FUNCTION  main
+line 3   PUNCTUATION           (
+line 3   PUNCTUATION           )
+line 3   PUNCTUATION           {
+line 4   KEYWORD               int
+line 4   IDENTIFIER            seed
+line 4   PUNCTUATION           ;
+line 5   KEYWORD               int
+line 5   IDENTIFIER            i
+line 5   PUNCTUATION           ;
+line 6   KEYWORD               int
+line 6   IDENTIFIER            total
+line 6   PUNCTUATION           ;
+line 7   IDENTIFIER            seed
+line 7   ASSIGNMENT_OPERATOR   =
+line 7   INTEGER_LITERAL       2
+line 7   ARITHMETIC_OPERATOR   +
+line 7   INTEGER_LITERAL       3
+line 7   ARITHMETIC_OPERATOR   *
+line 7   INTEGER_LITERAL       4
+line 7   PUNCTUATION           ;
+line 8   IDENTIFIER            i
+line 8   ASSIGNMENT_OPERATOR   =
+line 8   INTEGER_LITERAL       0
+line 8   PUNCTUATION           ;
+line 9   IDENTIFIER            total
+line 9   ASSIGNMENT_OPERATOR   =
+line 9   INTEGER_LITERAL       0
+line 9   PUNCTUATION           ;
+line 10  KEYWORD               while
+line 10  PUNCTUATION           (
+line 10  IDENTIFIER            i
+line 10  RELATIONAL_OPERATOR   <
+line 10  INTEGER_LITERAL       5
+line 10  PUNCTUATION           )
+line 10  PUNCTUATION           {
+line 11  IDENTIFIER            total
+line 11  ASSIGNMENT_OPERATOR   =
+line 11  IDENTIFIER            total
+line 11  ARITHMETIC_OPERATOR   +
+line 11  IDENTIFIER            i
+line 11  ARITHMETIC_OPERATOR   *
+line 11  IDENTIFIER            seed
+line 11  PUNCTUATION           ;
+line 12  IDENTIFIER            i
+line 12  ASSIGNMENT_OPERATOR   =
+line 12  IDENTIFIER            i
+line 12  ARITHMETIC_OPERATOR   +
+line 12  INTEGER_LITERAL       1
+line 12  PUNCTUATION           ;
+line 13  PUNCTUATION           }
+line 14  KEYWORD               return
+line 14  IDENTIFIER            total
+line 14  ARITHMETIC_OPERATOR   +
+line 14  IDENTIFIER            seed
+line 14  PUNCTUATION           ;
+line 15  PUNCTUATION           }
+
+===== SYNTAX TREE =====
+FUNCTION main ()
+    DECLARE seed
+    DECLARE i
+    DECLARE total
+    ASSIGN seed = 2 + (3 * 4)
+    ASSIGN i = 0
+    ASSIGN total = 0
+    WHILE i < 5
+        ASSIGN total = total + (i * seed)
+        ASSIGN i = i + 1
+    RETURN total + seed
+
+
+===== SYMBOL TABLE =====
+function main (0 params)
+    seed     local  fp+4
+    i        local  fp+5
+    total    local  fp+6
+
+===== ACTIVATION RECORDS =====
+
+main:
+    fp+0  return address
+    fp+1  control link
+    fp+2  access link (reserved: -1)
+    fp+3  return value
+    fp+4  local seed
+    fp+5  local i
+    fp+6  local total
+    fp+7  temp t1
+    fp+8  temp t2
+    fp+9  temp t3
+    fp+10  temp t4
+    fp+11  temp t5
+    fp+12  temp t6
+    fp+13  temp t7
+
+===== THREE-ADDRESS CODE =====
+
+main:
+    t1 = 3 * 4
+    t2 = 2 + t1
+    seed@4 = t2
+    i@5 = 0
+    total@6 = 0
+    L1:
+    t3 = i@5 < 5
+    ifFalse t3 goto L2
+    t4 = i@5 * seed@4
+    t5 = total@6 + t4
+    total@6 = t5
+    t6 = i@5 + 1
+    i@5 = t6
+    goto L1
+    L2:
+    t7 = total@6 + seed@4
+    return t7
+    trap missing return
+
+===== QUADRUPLES =====
+
+main:
+    #    (op, arg1, arg2, result)
+    0    (*, 3, 4, t1)
+    1    (+, 2, t1, t2)
+    2    (=, t2, -, seed@4)
+    3    (=, 0, -, i@5)
+    4    (=, 0, -, total@6)
+    5    (label, -, -, L1)
+    6    (<, i@5, 5, t3)
+    7    (ifFalse, t3, -, L2)
+    8    (*, i@5, seed@4, t4)
+    9    (+, total@6, t4, t5)
+    10   (=, t5, -, total@6)
+    11   (+, i@5, 1, t6)
+    12   (=, t6, -, i@5)
+    13   (goto, -, -, L1)
+    14   (label, -, -, L2)
+    15   (+, total@6, seed@4, t7)
+    16   (return, t7, -, -)
+    17   (trap, missing return, -, -)
+
+===== OPTIMIZED TAC =====
+
+main:
+    seed@4 = 14
+    i@5 = 0
+    total@6 = 0
+    L1:
+    t3 = i@5 < 5
+    ifFalse t3 goto L2
+    t4 = i@5 * seed@4
+    t5 = total@6 + t4
+    total@6 = t5
+    t6 = i@5 + 1
+    i@5 = t6
+    goto L1
+    L2:
+    t7 = total@6 + seed@4
+    return t7
+
+===== VM EXECUTION =====
+Result: 154
+
+===== OPTIMIZER STATISTICS =====
+static instructions: 18 -> 15 (16.7% fewer)
+dynamic VM steps: 56 -> 54 (3.6% fewer)
+passes to fixpoint: 2
+constants folded: 4
+algebraic rewrites: 0
+strength reductions: 0
+common subexprs: 0
+copies propagated: 0
+branches folded: 0
+unreachable removed: 1
+dead stores removed: 2
